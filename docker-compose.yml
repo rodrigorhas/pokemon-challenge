@@ -1,0 +1,43 @@
+version: '3.8'
+services:
+  app:
+    container_name: pokemon
+    image: node:latest
+    working_dir: /var/www
+    command: npm run serve
+    ports:
+      - "3000:3000"
+    networks:
+      - pokemon_net
+    volumes:
+      - '.:/var/www'
+    depends_on:
+      - mssql
+
+  mssql:
+    container_name: pokemon-mssql
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - sqlsystem:/var/opt/mssql/
+      - sqldata:/var/opt/sqlserver/data
+      - sqllog:/var/opt/sqlserver/log
+      - sqlbackup:/var/opt/sqlserver/backup
+    ports:
+      - "1433:1433"
+    networks:
+      - pokemon_net
+
+networks:
+  pokemon_net:
+    name: pokemon_net
+    driver: bridge
+
+volumes:
+  sqlsystem:
+  sqldata:
+  sqllog:
+  sqlbackup:
