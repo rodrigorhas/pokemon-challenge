@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node -r esm ./bin/www",
-    "serve": "npx webpack -w",
+    "serve": "NODE_ENV=development npx webpack -w",
     "sqlz": "node_modules/.bin/sequelize"
   },
   "dependencies": {
@@ -15,7 +15,8 @@
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
     "morgan": "~1.9.1",
-    "sequelize": "^2.0.0-rc1",
+    "mysql2": "^2.2.5",
+    "sequelize": "^6.3.5",
     "sequelize-cli": "^6.2.0",
     "sequelize-paginate": "^1.1.6",
     "tedious": "^9.2.1"
