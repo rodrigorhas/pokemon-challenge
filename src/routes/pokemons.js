@@ -1,5 +1,5 @@
 import express from "express";
-import {Pokemon} from "../models/pokemon";
+import {Pokemon} from "../models/Pokemon";
 import {StatusCode} from "./resources/status-code";
 
 const router = express.Router();
