@@ -1,4 +1,4 @@
-const StatusCode = {
+export const StatusCode = {
     CONTINUE: 100,
     SWITCHING_PROTOCOLS: 101,
     PROCESSING: 102,
@@ -55,5 +55,3 @@ const StatusCode = {
     INSUFFICIENT_STORAGE: 507,
     NETWORK_AUTHENTICATION_REQUIRED: 511
 }
-
-module.exports = {StatusCode}

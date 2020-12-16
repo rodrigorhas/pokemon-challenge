@@ -63,4 +63,4 @@ router.get('/', async function (request, response) {
     response.json({docs, pages, total});
 });
 
-module.exports = router;
+export default router;

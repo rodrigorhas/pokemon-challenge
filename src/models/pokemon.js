@@ -1,16 +1,16 @@
 import {paginate as usePagination} from "sequelize-paginate";
-import sequelize from 'sequelize';
+import db from "./index";
 
 export const PokemonTypes = ['charizard', 'mewtwo', 'pikachu'];
 
-export const Pokemon = usePagination(sequelize.define('Pokemon', {
-    treinador: DataTypes.STRING,
+export const Pokemon = usePagination(db.Sequelize.define('Pokemon', {
+    treinador: db.Sequelize.STRING,
     level: {
-        type: sequelize.INT,
+        type: db.Sequelize.INT,
         defaultValue: 1
     },
     tipo: {
-        type: DataTypes.ENUM,
+        type: db.Sequelize.ENUM,
         values: PokemonTypes
     }
 }))
