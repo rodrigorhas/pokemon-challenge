@@ -1,9 +1,9 @@
 const path = require('path')
 const NodemonPlugin = require('nodemon-webpack-plugin')
-const nodeExternals = require('webpack-node-externals');
+const nodeExternals = require('webpack-node-externals')
 
 module.exports = {
-    entry: './src/index.js',
+    entry: './bin/www.js',
     output: {
         filename: 'index.js',
         path: path.resolve(__dirname, 'dist')

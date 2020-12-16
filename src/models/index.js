@@ -2,11 +2,9 @@ import fs from "fs";
 import path from "path";
 import Sequelize from "sequelize";
 import Config from "../config/config.js";
+import {env} from "../utils";
 
 const basename = path.basename(__filename);
-const env = process.env.NODE_ENV || 'development';
-
-console.log(env)
 
 const config = Config[env];
 const db = {};
@@ -23,9 +21,16 @@ fs
   .filter(file => {
     return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
   })
-  .forEach(file => {
-    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
-    db[model.name] = model;
+  .forEach(async (file) => {
+    let modelFactory = await import(path.join(__dirname, file))
+
+    if (typeof modelFactory === 'function') {
+      modelFactory = modelFactory(sequelize, Sequelize.DataTypes)
+    } else {
+      modelFactory = modelFactory.default
+    }
+
+    db[modelFactory.name] = modelFactory;
   });
 
 Object.keys(db).forEach(modelName => {

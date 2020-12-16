@@ -3,9 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node -r esm ./bin/www",
-    "serve": "NODE_ENV=development npx webpack -w",
-    "sqlz": "node_modules/.bin/sequelize"
+    "start": "DEBUG=* node -r esm bin/www.js",
+    "serve": "DEBUG=* NODE_ENV=development npx webpack -w",
+    "sqlz": "node -r esm node_modules/.bin/sequelize"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
