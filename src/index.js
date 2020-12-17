@@ -7,6 +7,7 @@ import logger from "morgan";
 import indexRouter from "./routes";
 import pokemonRouter from "./routes/pokemon";
 import battleRouter from "./routes/batalhar";
+import {useSwagger} from "./routes/docs";
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use('/', indexRouter);
 app.use('/pokemons', pokemonRouter);
 app.use('/batalhar', battleRouter);
 
+useSwagger(app)
 app.use('/assets', express.static(path.join(__dirname, 'public')));
 
 // catch 404 and forward to error handler
