@@ -3,13 +3,15 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "DEBUG=* node -r esm bin/www.js",
+    "start": "DEBUG=* NODE_ENV=production node -r esm bin/www.js",
     "serve": "DEBUG=* NODE_ENV=development npx webpack -w",
+    "build": "npx webpack",
     "sqlz": "node -r esm node_modules/.bin/sequelize"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
+    "dotenv": "^8.2.0",
     "esm": "^3.2.25",
     "express": "~4.16.1",
     "express-validator": "^6.8.0",

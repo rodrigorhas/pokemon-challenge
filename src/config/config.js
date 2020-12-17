@@ -1,21 +1,20 @@
-const local = {
-    username: "sa",
-    password: "R0dr1g0rh45!@#$",
-    database: "master",
-    host: "pokemon-mssql",
-    dialect: "mssql",
-    schema: 'RODRIGO',
-};
+const isDocker = process.env.IS_DOCKER || false
 
 module.exports = {
-    development: local,
-    test: local,
+    development: {
+        username: 'sa',
+        password: 'P0k3m0nch4ll3ng3',
+        database: 'master',
+        host: isDocker ? 'pokemon-mssql' : 'localhost',
+        dialect: 'mssql',
+        schema: 'POKEMON',
+    },
     production: {
-        username: "DesafioAdmin",
-        password: "Picachu123",
-        database: "Desafio-jz",
-        host: "127.0.0.1",
-        dialect: "mssql",
+        username: 'DesafioAdmin',
+        password: 'Picachu123',
+        database: 'Desafio-jz',
+        host: 'jzd-dev-desafio.database.windows.net',
+        dialect: 'mssql',
         schema: 'RODRIGO',
     }
 }
