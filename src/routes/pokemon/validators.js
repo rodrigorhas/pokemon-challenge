@@ -1,11 +1,11 @@
 import {body} from "express-validator";
 import {PokemonTypes} from "../../models/Pokemon";
 
-export const StoreValidationRules = [
+export const StorePokemonValidationRules = [
     body('tipo').isIn(PokemonTypes),
     body('treinador').isString()
 ]
 
-export const UpdateValidationRules = [
+export const UpdatePokemonValidationRules = [
     body('treinador').isString()
 ]

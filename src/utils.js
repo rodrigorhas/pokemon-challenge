@@ -1,6 +1,7 @@
 import {StatusCode} from "./resources/status-code";
 import {ValidationError} from "sequelize";
 import {validationResult} from "express-validator";
+import {ApplicationValidationError} from "./resources/applicationValidationError";
 
 export const env = process.env.NODE_ENV || 'development';
 
@@ -40,14 +41,12 @@ const validationErrorHandler = (request, response, exception) => {
         return result;
     }, []);
 
-    response.status(StatusCode.UNPROCESSABLE_ENTITY).send({
-        id: 'validation_failed',
-        message: 'Validation error',
-        meta: {
-            errors: formattedErrors
-        }
-    })
+    const validationError = new ApplicationValidationError()
+    validationError.addErrors(formattedErrors)
+
+    response.status(StatusCode.UNPROCESSABLE_ENTITY).send(validationError)
 }
+
 export const errorHandler = (request, response) => (exception) => {
     if (exception instanceof ValidationError) {
         return validationErrorHandler(request, response, exception)
@@ -67,13 +66,10 @@ const executeValidationsMiddleware = (req, res, next) => {
         items.map((error) => renameKeys({msg: 'message', param: 'field'}, error))
 
     if (!errors.isEmpty()) {
-        return res.status(400).json({
-            id: 'validation_failed',
-            message: 'Validation error',
-            meta: {
-                errors: mapErrors(errors.array())
-            }
-        });
+        const validationError = new ApplicationValidationError()
+        validationError.addErrors(mapErrors(errors.array()))
+
+        return res.status(400).json(validationError);
     }
 
     next();

@@ -2,14 +2,14 @@ import express from "express";
 import {Pokemon, serialize} from "../../models/Pokemon";
 import {StatusCode} from "../../resources/status-code";
 import {errorHandler, useSchemaValidation} from "../../utils";
-import {StoreValidationRules, UpdateValidationRules} from "./validators";
+import {StorePokemonValidationRules, UpdatePokemonValidationRules} from "./validators";
 
 const router = express.Router();
 
 /**
  * Store Pokemon
  */
-router.post('/', useSchemaValidation(StoreValidationRules), async (request, response) => {
+router.post('/', useSchemaValidation(StorePokemonValidationRules), async (request, response) => {
     const {body} = request;
 
     // CREATE model logic
@@ -24,7 +24,7 @@ router.post('/', useSchemaValidation(StoreValidationRules), async (request, resp
 /**
  * Update Pokemon
  */
-router.put('/:id', useSchemaValidation(UpdateValidationRules), async (request, response) => {
+router.put('/:id', useSchemaValidation(UpdatePokemonValidationRules), async (request, response) => {
     const {id} = request.params;
     const {treinador} = request.body;
 
