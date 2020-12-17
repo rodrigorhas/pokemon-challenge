@@ -1,14 +1,15 @@
 import express from "express";
-import {Pokemon, serialize} from "../models/Pokemon";
-import {StatusCode} from "./resources/status-code";
-import {errorHandler} from "../utils";
+import {Pokemon, serialize} from "../../models/Pokemon";
+import {StatusCode} from "../../resources/status-code";
+import {errorHandler, useSchemaValidation} from "../../utils";
+import {StoreValidationRules, UpdateValidationRules} from "./validators";
 
 const router = express.Router();
 
 /**
- * Sore Pokemon
+ * Store Pokemon
  */
-router.post('/', async (request, response) => {
+router.post('/', useSchemaValidation(StoreValidationRules), async (request, response) => {
     const {body} = request;
 
     // CREATE model logic
@@ -23,13 +24,9 @@ router.post('/', async (request, response) => {
 /**
  * Update Pokemon
  */
-router.put('/:id', async (request, response) => {
+router.put('/:id', useSchemaValidation(UpdateValidationRules), async (request, response) => {
     const {id} = request.params;
     const {treinador} = request.body;
-
-    if (!treinador) {
-        // TODO: validate schema with express-validator
-    }
 
     // UPDATE model logic
     await Pokemon.update({treinador}, {where: {id}})
@@ -75,9 +72,12 @@ router.get('/', async (request, response) => {
     // Support filters?
     // const {docs: resources, pages, total} = await Pokemon.paginate({ page: 1, paginate: 25 })
 
-    const resources = await Pokemon.findAll();
+    /**
+     * @type {Pokemon[]}
+     */
+    const resources = await Pokemon.findAll()
 
-    response.json(resources);
-});
+    response.json(resources.map(serialize))
+})
 
 export default router;
