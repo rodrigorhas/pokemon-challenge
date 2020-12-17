@@ -1,34 +1,38 @@
 import express from "express";
-import {Pokemon} from "../models/Pokemon";
+import {Pokemon, serialize} from "../models/Pokemon";
 import {StatusCode} from "./resources/status-code";
+import {errorHandler} from "../utils";
 
 const router = express.Router();
 
 /**
  * Sore Pokemon
  */
-router.post('/', function (request, response) {
-    const {body} = request.body;
+router.post('/', async (request, response) => {
+    const {body} = request;
 
     // CREATE model logic
+    const pokemon = await Pokemon.create({
+        "tipo": body.tipo,
+        "treinador": body.treinador
+    }).catch(errorHandler(request, response))
 
-    // should return this format - model data + generated id - code 200
-    response.json({
-        "id": 1,
-        "tipo": "pikachu",
-        "treinador": "Thiago",
-        "nivel": 1
-    })
+    response.json(serialize(pokemon))
 })
 
 /**
  * Update Pokemon
  */
-router.put('/:id', function (request, response) {
+router.put('/:id', async (request, response) => {
     const {id} = request.params;
-    const {trainee} = request.body;
+    const {treinador} = request.body;
+
+    if (!treinador) {
+        // TODO: validate schema with express-validator
+    }
 
     // UPDATE model logic
+    await Pokemon.update({treinador}, {where: {id}})
 
     response.sendStatus(StatusCode.NO_CONTENT)
 })
@@ -36,10 +40,12 @@ router.put('/:id', function (request, response) {
 /**
  * Destroy Pokemon
  */
-router.delete('/:id', function (request, response) {
+router.delete('/:id', async (request, response) => {
     const {id} = request.params;
 
+    // TODO: add validation to check if resource exists?
     // DESTROY model logic
+    await Pokemon.destroy({where: {id}})
 
     response.sendStatus(204)
 })
@@ -47,20 +53,31 @@ router.delete('/:id', function (request, response) {
 /**
  * Show Pokemon
  */
-router.get('/:id', function (request, response) {
+router.get('/:id', async (request, response) => {
     const {id} = request.params;
 
     // SHOW model logic
+    const resource = await Pokemon.findOne({where: {id}})
 
-    response.sendStatus(204)
+    if (!resource) {
+        // TODO: throw validation error if resource doesn't exists?
+    }
+
+    response.json(resource)
 })
 
-/* Index Pokemons */
-router.get('/', async function (request, response) {
+/**
+ *  Index Pokemons
+ */
+router.get('/', async (request, response) => {
+    // Uncomment to paginate
     // Default page = 1 and paginate = 25
-    const {docs, pages, total} = await Pokemon.paginate({ page: 1, paginate: 25 })
+    // Support filters?
+    // const {docs: resources, pages, total} = await Pokemon.paginate({ page: 1, paginate: 25 })
 
-    response.json({docs, pages, total});
+    const resources = await Pokemon.findAll();
+
+    response.json(resources);
 });
 
 export default router;
