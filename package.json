@@ -22,6 +22,7 @@
     "tedious": "^9.2.1"
   },
   "devDependencies": {
+    "copy-webpack-plugin": "^7.0.0",
     "nodemon-webpack-plugin": "^4.3.2",
     "webpack": "^5.10.3",
     "webpack-cli": "^4.2.0",
